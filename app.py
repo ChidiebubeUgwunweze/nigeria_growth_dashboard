@@ -34,7 +34,7 @@ app.layout = html.Div([                     # app.layout is the entire Dash app
         }
     ),
 
-    html.Div([ html.Label(id='Select Analysis Date:'),   
+    html.Div([ html.Label('Select Analysis Date:'),   
                dcc.DatePickerSingle(id='date-picker',
                                    min_date_allowed = df['Truckout date'].min(), 
                                    max_date_allowed= df['Truckout date'].max(), 
@@ -86,6 +86,7 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
 
     #Creating Dataframe for plotting bar chart
     bar_dataframe = pd.DataFrame(window_df.groupby("Truckout date")["Quantity loaded"].sum()).reset_index()
+    
 
     # Average for 30 days for bar plot
     average = window_df["Quantity loaded"].sum() / WINDOW_DAYS
@@ -95,6 +96,9 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
     today_value = today_data["Quantity loaded"].sum() # Total quantity loaded today
     #--------------------------------------------------------------------------------------------------------------------------------------------
     #LINE CHART (MOVING AVERAGE) LOGIC
+    end_date = bar_dataframe['Truckout date'].max()
+    begin_date = end_date - pd.Timedelta(days=plot_points)
+    
     line_chart_data = df.groupby("Truckout date")["Quantity loaded"].sum().reset_index()
 
     line_chart_data["Moving average"] = (
@@ -102,7 +106,12 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
     .rolling(window=WINDOW_DAYS, min_periods=1)
     .mean()
     )
-    line_chart_data = line_chart_data.tail(plot_points)
+
+    linechart_filtered = line_chart_data[
+    (line_chart_data['Truckout date'] >= begin_date) &
+    (line_chart_data['Truckout date'] <= end_date)
+      ]
+    
     #-----------------------------------------------------------------------------------------------------------------------------------------------
     #MAP LOGIC
     #Data filter for map
@@ -195,8 +204,8 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
     line_fig = go.Figure()
 
     line_fig.add_trace(go.Scatter(
-        x=line_chart_data["Truckout date"],
-        y=line_chart_data["Moving average"],
+        x=linechart_filtered["Truckout date"],
+        y=linechart_filtered["Moving average"],
         mode="lines",
         name="Quantity"
         ))
@@ -205,7 +214,7 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
         template="plotly_white",
         margin=dict(l=20, r=20, t=40, b=20)
     )
-    line_fig.update_layout(title=f"Moving average from {line_chart_data["Truckout date"].iloc[0]} to {line_chart_data["Truckout date"].iloc[-1]} with {WINDOW_DAYS} days window and {plot_points} data points", xaxis_title= "Date", yaxis_title="Moving Averages")
+    line_fig.update_layout(title=f"Moving average from {linechart_filtered["Truckout date"].iloc[0]} to {linechart_filtered["Truckout date"].iloc[-1]} with {WINDOW_DAYS} days window and {plot_points} data points", xaxis_title= "Date", yaxis_title="Moving Averages")
     line_fig.update_xaxes(autorange=True)
     line_fig.update_yaxes(autorange=True)
 
