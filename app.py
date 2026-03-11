@@ -1,5 +1,5 @@
 import dash
-from dash import html, dcc, Input, Output, State, ALL
+from dash import html, dcc, Input, Output, State, ALL, callback
 from data.utils import state_centers, number_picker, update_value, human_format
 import plotly.graph_objects as go
 import plotly.express as px
@@ -23,10 +23,12 @@ app.layout = html.Div([                     # app.layout is the entire Dash app
    # Date Picker Div. html.Div is a demarcated section of the app.layout. In this html.Div we will have the date picker
     html.Div(
         [
-            number_picker(1, "Window Average (Days)")
+            number_picker(1, "Window Days"),
+            number_picker(2, "Data Points (Line Graph)"),
         ],
         style={
-            "display": "flex",         # spacing between them
+            "display": "flex",
+            "gap": "30px",            # spacing between them
             "alignItems": "flex-start",
             "justifyContent": "center"
         }
@@ -42,11 +44,13 @@ app.layout = html.Div([                     # app.layout is the entire Dash app
     html.Div([
         # The Bar Chart
         dcc.Graph(id='bar-chart', style={'width': '100%', 'height': '120vh', 'marginBottom':'80px'}),
+        #The Moving Average Line Chart
+        dcc.Graph(id='line-chart', style={'width': '80%', 'height': '500px', 'marginBottom':'80px'}),
         # The Nigerian Map
         dcc.Graph(id='nigerian-map', style={'width': '100%', 'height': '150vh'})
         ],style={'padding':'30px'})
-
-]) 
+    
+    ]) 
 
 @app.callback(
         Output({"type": "input","index": ALL}, "value"),
@@ -64,19 +68,20 @@ def update_selector(plus_clicks, minus_clicks, current_values):
 @app.callback(
     Output('bar-chart','figure'), 
     Output('nigerian-map', 'figure'),
+    Output('line-chart', 'figure'),
     Input('date-picker', 'date'),
-    Input({"type": "input","index": 1}, 'value')
+    Input({"type":"input", "index":1}, 'value'),
+    Input({"type":"input", "index":2}, "value")
 )
 
-def get_growth_metrics(selected_date, WINDOW_DAYS):
-    # WINDOW_DAYS = days_window
+def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date (date selected), WINDOW_DAYS (Averaging days), plot_points i.e no. of plot points for line graph
     #STEP 1: Create current date and the starting date
     target_date = pd.to_datetime(selected_date).date()  # Current date
     start_date = target_date - pd.Timedelta(days=WINDOW_DAYS)    # Starting date
-    #---------------------------------------------------------------------------------------------------------------
-    
-    # STEP: 30 days DataFrame filtering logic
-    mask_30d = (df['Truckout date'] >= start_date) & (df['Truckout date'] < target_date)
+    #--------------------------------------------------------------------------------------------------------------------------------------------------
+    #BAR CHART LOGIC
+    # Filtering Logic for Bar Chart and Line Chart
+    mask_30d = (df['Truckout date'] > start_date) & (df['Truckout date'] <= target_date)
     window_df = df[mask_30d] 
 
     #Creating Dataframe for plotting bar chart
@@ -88,13 +93,26 @@ def get_growth_metrics(selected_date, WINDOW_DAYS):
     #Today's info:
     today_data = df[(df['Truckout date'] == target_date)] # Filtering for only today's data
     today_value = today_data["Quantity loaded"].sum() # Total quantity loaded today
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    #LINE CHART (MOVING AVERAGE) LOGIC
+    line_chart_data = df.groupby("Truckout date")["Quantity loaded"].sum().reset_index()
 
-   #-----------------------------------------------------------------------------------------------------------------------------------------------
+    line_chart_data["Moving average"] = (
+    line_chart_data["Quantity loaded"]
+    .rolling(window=WINDOW_DAYS, min_periods=1)
+    .mean()
+    )
+    line_chart_data = line_chart_data.tail(plot_points)
+    #-----------------------------------------------------------------------------------------------------------------------------------------------
+    #MAP LOGIC
+    #Data filter for map
+    mask_map = (df['Truckout date'] >= start_date) & (df['Truckout date'] < target_date)
+    data_map = df[mask_map]
     # Creating the ultimate DataFrame for the Nigerian Map
     state_info_1 = pd.DataFrame({
-    "Truckout date": window_df["Truckout date"],
-    "Destination state": window_df["Destination state"], 
-    "Quantity loaded": window_df["Quantity loaded"]
+    "Truckout date": data_map["Truckout date"],
+    "Destination state": data_map["Destination state"], 
+    "Quantity loaded": data_map["Quantity loaded"]
     })
     
     state_info = pd.DataFrame(state_info_1.groupby(["Truckout date","Destination state"])["Quantity loaded"].sum()).reset_index()
@@ -106,22 +124,12 @@ def get_growth_metrics(selected_date, WINDOW_DAYS):
     today_map = pd.DataFrame(today_data.groupby(["Truckout date","Destination state"])["Quantity loaded"].sum()).reset_index() #Today data per state
     state_info["Percentage Growth %"] = ((today_map["Quantity loaded"] - state_info["Average"]) / state_info["Average"]) * 100
     #----------------------------------------------------------------------------------------------------------------------------------------------
-    
-    # Comparison Logic for the bar chart average line colour
-    line_colour = "green"
-    if today_value < average:
-        line_colour = "red"
-    elif today_value == average:
-        line_colour = "orange"
-
-    # PLOTTING BAR AND MAP
-    #----------------------------------------------------------------------------------------------------------------------------------------------
     # Plotting FIGURE 1: Bar Chart
     bar_fig = go.Figure() # Creating instance of a figure (bar chart)
     # Drawing the bar chart
     bar_fig.add_trace(go.Bar(x= bar_dataframe['Truckout date'], y= bar_dataframe['Quantity loaded'], marker_color= 'royalblue')) 
     # Adding the average line
-    bar_fig.add_hline(y=average, line_dash= "solid", line_color= line_colour, annotation_text=f"{WINDOW_DAYS}-Day(s) Avg: {human_format(average)}", annotation_position = "top left")
+    bar_fig.add_hline(y=average, line_dash= "solid", line_color="orange", annotation_text=f"{WINDOW_DAYS}-Day(s) Avg: {human_format(average)}", annotation_position = "top left")
     bar_fig.update_layout(title=f"{WINDOW_DAYS}-Day Trend leading to {target_date}", xaxis_title= "Days", yaxis_title="Quantiy loaded")
     #----------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -183,8 +191,25 @@ def get_growth_metrics(selected_date, WINDOW_DAYS):
                             lonaxis_range=[2, 15],),    # Tighten the 'camera' to Nigerian longitudes 
                             height=1000)
     #------------------------------------------------------------------------------------------------------------------------------------------------       
+    # Plotting FIGURE 3: LineGraph (Moving average)
+    line_fig = go.Figure()
 
-    return bar_fig, map_fig
+    line_fig.add_trace(go.Scatter(
+        x=line_chart_data["Truckout date"],
+        y=line_chart_data["Moving average"],
+        mode="lines",
+        name="Quantity"
+        ))
+    
+    line_fig.update_layout(
+        template="plotly_white",
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+    line_fig.update_layout(title=f"Moving average from {line_chart_data["Truckout date"].iloc[0]} to {line_chart_data["Truckout date"].iloc[-1]} with {WINDOW_DAYS} days window and {plot_points} data points", xaxis_title= "Date", yaxis_title="Moving Averages")
+    line_fig.update_xaxes(autorange=True)
+    line_fig.update_yaxes(autorange=True)
+
+    return bar_fig, map_fig, line_fig
     
 if __name__ == "__main__":
     app.run(debug=True) 

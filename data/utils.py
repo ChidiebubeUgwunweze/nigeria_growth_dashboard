@@ -96,4 +96,4 @@ def human_format(num):
         magnitude += 1
         num /= 1000.0
     # add more suffixes if you need Quadrillion, etc.
-    return '{:.1f}{}'.format(num, ['', 'K', 'M', 'B', 'T','Q'][magnitude])
+    return '{:.3f}{}'.format(num, ['', 'K', 'M', 'B', 'T','Q'][magnitude])
