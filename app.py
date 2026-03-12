@@ -79,7 +79,7 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
     #STEP 1: Create current date and the starting date
     target_date = pd.to_datetime(selected_date).date()  # Current date
     start_date = target_date - pd.Timedelta(days=WINDOW_DAYS)    # Starting date
-    #--------------------------------------------------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------------------------------------------------------------
     #BAR CHART LOGIC
     # Filtering Logic for Bar Chart and Line Chart
     mask_30d = (df['Truckout date'] > start_date) & (df['Truckout date'] <= target_date)
