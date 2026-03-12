@@ -18,7 +18,7 @@ app = dash.Dash(__name__) ## Create instance of Dashboard app
 
 app.layout = html.Div([                     # app.layout is the entire Dash app
     # Header of app
-    html.H1("Nigerian Downstream Chain Growth Monitor by Quantity loaded", style={'textAlign': 'center'}),   # Heading and title of the page 
+    html.H1("Nigerian Downstream Quantity Loaded Monitor ", style={'textAlign': 'center'}),   # Heading and title of the page 
     
    # Date Picker Div. html.Div is a demarcated section of the app.layout. In this html.Div we will have the date picker
     html.Div(
@@ -75,6 +75,7 @@ def update_selector(plus_clicks, minus_clicks, current_values):
 )
 
 def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date (date selected), WINDOW_DAYS (Averaging days), plot_points i.e no. of plot points for line graph
+    
     #STEP 1: Create current date and the starting date
     target_date = pd.to_datetime(selected_date).date()  # Current date
     start_date = target_date - pd.Timedelta(days=WINDOW_DAYS)    # Starting date
@@ -82,22 +83,19 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
     #BAR CHART LOGIC
     # Filtering Logic for Bar Chart and Line Chart
     mask_30d = (df['Truckout date'] > start_date) & (df['Truckout date'] <= target_date)
-    window_df = df[mask_30d] 
+    window_df = df[mask_30d]
 
     #Creating Dataframe for plotting bar chart
     bar_dataframe = pd.DataFrame(window_df.groupby("Truckout date")["Quantity loaded"].sum()).reset_index()
     
 
-    # Average for 30 days for bar plot
+    # Average for 30 days for bar plot average line
     average = window_df["Quantity loaded"].sum() / WINDOW_DAYS
 
-    #Today's info:
-    today_data = df[(df['Truckout date'] == target_date)] # Filtering for only today's data
-    today_value = today_data["Quantity loaded"].sum() # Total quantity loaded today
     #--------------------------------------------------------------------------------------------------------------------------------------------
     #LINE CHART (MOVING AVERAGE) LOGIC
     end_date = bar_dataframe['Truckout date'].max()
-    begin_date = end_date - pd.Timedelta(days=plot_points)
+    begin_date = end_date - pd.Timedelta(days=plot_points-1)
     
     line_chart_data = df.groupby("Truckout date")["Quantity loaded"].sum().reset_index()
 
@@ -130,6 +128,7 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
 
     state_info["Average"] = state_info["Quantity loaded"] / WINDOW_DAYS
 
+    today_data = df[(df['Truckout date'] == target_date)] # Filtering for only today's data
     today_map = pd.DataFrame(today_data.groupby(["Truckout date","Destination state"])["Quantity loaded"].sum()).reset_index() #Today data per state
     state_info["Percentage Growth %"] = ((today_map["Quantity loaded"] - state_info["Average"]) / state_info["Average"]) * 100
     #----------------------------------------------------------------------------------------------------------------------------------------------
@@ -212,7 +211,7 @@ def get_growth_metrics(selected_date, WINDOW_DAYS, plot_points): #selected_date 
     
     line_fig.update_layout(
         template="plotly_white",
-        margin=dict(l=20, r=20, t=40, b=20)
+        margin=dict(l=20, r=20, t=40, b=20),
     )
     line_fig.update_layout(title=f"Moving average from {linechart_filtered["Truckout date"].iloc[0]} to {linechart_filtered["Truckout date"].iloc[-1]} with {WINDOW_DAYS} days window and {plot_points} data points", xaxis_title= "Date", yaxis_title="Moving Averages")
     line_fig.update_xaxes(autorange=True)
