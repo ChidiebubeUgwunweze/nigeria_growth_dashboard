@@ -1,4 +1,4 @@
-from dash import html, dcc, ctx, ALL
+from dash import ctx
 
 # This function returns a dictionary containing the centers of each state in Nigera
 def state_centers():
@@ -41,34 +41,7 @@ def state_centers():
                       "Zamfara": {"lat": 12.17, "lon": 6.66} }
     return state_centers
  
-# Function for creating number pickers
-def number_picker(index: int, header: str) -> html.Div:
-  return html.Div([
 
-        html.Label(f"{header}", style={'margin-right': '15px', 'font-weight': 'bold'}),
-        
-        # The Stepper Container
-        html.Div([
-            html.Button("-", id={"type": "minus","index": index}, n_clicks=0, style={'width': '40px', 'height': '40px'}),
-            
-            dcc.Input(
-                id={"type": "input","index": index},
-                type="number",
-                value=7,  # Default value
-                style={
-                    'width': '60px', 
-                    'height': '34px', 
-                    'textAlign': 'center', 
-                    'border': '1px solid #ccc',
-                    'margin': '0 5px'}),
-                
-        html.Button("+", id={"type":"plus","index": index}, n_clicks=0, style={'width': '40px', 'height': '40px'})
-        ],style={'display': 'flex', 'align-items': 'center'}),
-        
-        # html.Hr(),
-        
-    ], style={'padding': '20px', 'border': '1px solid #ddd', 'width': '180px', 'border-radius': '8px'})
-             
 
 def update_value(plus_clicks, minus_clicks, current_values):
 
