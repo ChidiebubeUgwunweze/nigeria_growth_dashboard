@@ -5,7 +5,8 @@ from data.utils import update_value
 from data.components import header, selectors, date_selector, figures
 
 app = dash.Dash(__name__) ## Create instance of Dashboard app
-# server = app.server
+#for deployment
+server = app.server
 
 app.layout = html.Div([                     # app.layout is the entire Dash app
    # Header of app
