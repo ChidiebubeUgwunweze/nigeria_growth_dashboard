@@ -10,7 +10,6 @@ The system compares **daily performance against a rolling 30-day historical base
 This tool is designed to support **data-driven decision making**, trend monitoring, and early signal detection across multiple regions.
 
 ---
-
 ## 🔗 Quick Links
 * 🚀 **Live Application:** [View Live App on Render](https://nigerian-growth-dashboard.onrender.com)
 * 📺 **Video Demo:** [Watch the 2-Minute Walkthrough](https://youtube.com/... or loom.com/...)
