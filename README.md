@@ -11,6 +11,23 @@ This tool is designed to support **data-driven decision making**, trend monitori
 
 ---
 
+## 🔗 Quick Links
+* 🚀 **Live Application:** [View Live App on Render](https://nigerian-growth-dashboard.onrender.com)
+* 📺 **Video Demo:** [Watch the 2-Minute Walkthrough](https://youtube.com/... or loom.com/...)
+
+---
+
+### 🖥️ Dashboard Preview
+
+<p align="center">
+  <img src="screenshots/bar_chart.png" width="45%" />
+  <img src="screenshots/moving_average.png" width="45%" />
+  <img src="screenshots/nigerian_map.png" width="45%" />
+  
+</p>
+
+---
+
 ## 🎯 What Problem This Solves
 
 Organizations often collect large volumes of operational data but lack tools to:
@@ -28,16 +45,18 @@ This dashboard turns raw operational data into **clear, actionable insight**.
 
 For any selected analysis date:
 
-### 1️⃣ Rolling 30-Day Window
-- The system looks **30 days backward** from the selected date  
-- Computes the **average daily quantity** over that window  
+### 1️⃣ Rolling N-Day Window
+- The system looks **N days backward** from the selected date  
+- Computes the **average daily quantity** over that window 
+
+Where N is the number of window days selected
 
 ### 2️⃣ Daily Comparison
 - The selected day’s total quantity is compared against the 30-day average  
 
 **Status Logic:**
-- 🟢 **Green** → Today’s value is above the 30-day average (growth)  
-- 🔴 **Red** → Today’s value is below the 30-day average (decline)  
+- 🟢 **Green** → Today’s value is above the N-day average (growth)  
+- 🔴 **Red** → Today’s value is below the N-day average (decline)  
 - ⚪ **Grey** → Today’s value equals the average (no change)  
 
 ---
@@ -45,8 +64,8 @@ For any selected analysis date:
 ## 📊 Visualizations
 
 ### 🔹 1. 30-Day Trend Bar Chart
-- Displays daily quantities for the previous 30 days  
-- Includes a horizontal reference line representing the 30-day average  
+- Displays daily quantities for the previous N days  
+- Includes a horizontal reference line representing the N-day average  
 - Line color dynamically reflects growth, decline, or neutrality  
 
 This helps users quickly assess **recent momentum leading into the selected day**.
