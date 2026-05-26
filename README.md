@@ -62,7 +62,7 @@ Where N is the number of window days selected
 
 ## 📊 Visualizations
 
-### 🔹 1. 30-Day Trend Bar Chart
+### 🔹 1. N-Day Trend Bar Chart
 - Displays daily quantities for the previous N days  
 - Includes a horizontal reference line representing the N-day average  
 - Line color dynamically reflects growth, decline, or neutrality  
@@ -73,7 +73,7 @@ This helps users quickly assess **recent momentum leading into the selected day*
 
 ### 🔹 2. Nigerian State-Level Growth Map
 - Visualizes performance across all Nigerian states  
-- Each state is colored based on **percentage growth or decline** relative to its 30-day average  
+- Each state is colored based on **percentage growth or decline** relative to its N-day average  
 - Percentage change is displayed directly on the map  
 
 **Color scale:**
@@ -167,13 +167,6 @@ This Project demonstrates:
 It goes beyond plotting data by **turning metrics into insight**.
 
 ---
-
-## The plots
-
-<p align="center">
-  <img src="screenshots/bar_chart.png" width="45%" />
-  <img src="screenshots/nigerian_map.png" width="45%" />
-</p>
 
 ## 📬 Author
 

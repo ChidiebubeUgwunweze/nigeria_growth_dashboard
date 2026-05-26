@@ -53,6 +53,7 @@ def map_plot(selected_date, WINDOW_DAYS, plot_points):
     map_fig = px.choropleth(
     state_info,
     geojson=nigeria_geo,
+    title=f'Growth Rate per State - Average of {WINDOW_DAYS} days before {selected_date} vs {selected_date}',
     locations='Destination state',
     featureidkey="properties.name", 
     color='Percentage Growth %',
