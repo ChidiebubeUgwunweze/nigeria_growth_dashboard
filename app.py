@@ -2,19 +2,33 @@ import dash
 from dash import html, dcc, Input, Output, State, ALL, callback
 from data.plot import bar_plot, map_plot, moving_average_plot
 from data.utils import update_value
-from data.components import header, selectors, date_selector, figures
+from data.components import header, selectors, date_selector, figures, kpi_cards
 
 app = dash.Dash(__name__) ## Create instance of Dashboard app
 #for deployment
-server = app.server
+server = app.server #for deployment
 
-app.layout = html.Div([                     # app.layout is the entire Dash app
+# Over writing the default white background to make the whole dashboard background black
+app.index_string = '''
+<!DOCTYPE html>
+<html>
+<head>{%metas%}{%title%}{%favicon%}{%css%}</head>
+<body style="margin:0; background-color:#0d1117;">
+{%app_entry%}
+{%config%}{%scripts%}{%renderer%}
+</body>
+</html>
+'''
+
+app.layout = html.Div(style={'backgroundColor': '#0d1117', 'padding': '20px'},children=[        # app.layout is the entire Dash app
    # Header of app
    header(),
    # Window Day selectors and Data Point selectors
    selectors(),
    # The target_date selector
    date_selector(),
+   # KPI Cards
+   kpi_cards(),
    # Bar Chart, Nigerian Map, Moving Averages
    figures()
  ]) 

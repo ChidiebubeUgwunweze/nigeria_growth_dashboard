@@ -1,0 +1,53 @@
+/* DATE PICKER SYTYLING */
+.dark-date-picker .DateInput_input {
+    background-color: #1a1a2e;
+    color: #00d4ff;
+    border: 2px solid #00d4ff;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    width: 150px; 
+}
+
+.dark-date-picker .DateInput_input:focus {
+    border-color: #00ffcc;
+    outline: none;
+}
+
+.dark-date-picker .SingleDatePickerInput {
+    background-color: transparent;
+    border: none;
+}
+
+.DayPicker {
+    background-color: #1a1a2e !important;
+    border-radius: 12px;
+}
+
+.DayPicker__withBorder {
+    border: 1px solid #00d4ff !important;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3) !important;
+}
+
+.CalendarDay__default {
+    background-color: #1a1a2e !important;
+    color: white !important;
+    border: 1px solid #2a2a3e !important;
+}
+
+.CalendarDay__selected {
+    background-color: #00d4ff !important;
+    color: #0d1117 !important;
+    font-weight: bold !important;
+}
+
+.CalendarMonth_caption {
+    color: #00d4ff !important;
+}
+
+.DayPickerNavigation_button {
+    border-color: #00d4ff !important;
+}
