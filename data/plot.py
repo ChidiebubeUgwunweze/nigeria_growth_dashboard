@@ -17,7 +17,7 @@ def bar_plot(selected_date, WINDOW_DAYS, plot_points):
     bar_fig.add_trace(go.Bar(x= bar_dataframe['Truckout date'], y= bar_dataframe['Quantity loaded'], marker_color= 'royalblue')) 
     # Adding the average line
     bar_fig.add_hline(y=average, line_dash= "solid", line_color="orange", annotation_text=f"{WINDOW_DAYS}-Day(s) Avg: {human_format(average)}", annotation_position = "top left")
-    bar_fig.update_layout(title=f"{WINDOW_DAYS}-Day Trend leading to {target_date}", xaxis_title= "Days", yaxis_title="Quantity loaded")
+    bar_fig.update_layout(title=f"{WINDOW_DAYS}-Day(s) Trend leading to {target_date}", xaxis_title= "Days", yaxis_title="Quantity loaded")
     bar_fig.update_layout(
     paper_bgcolor='#0d1117',  # outer background
     plot_bgcolor='#0d1117',   # inner chart background
@@ -42,7 +42,7 @@ def moving_average_plot(selected_date, WINDOW_DAYS, plot_points):
         template="plotly_white",
         margin=dict(l=20, r=20, t=40, b=20),
     )
-    line_fig.update_layout(title=f"{plot_points}-Day Moving Average -- {linechart_filtered["Truckout date"].iloc[0]} to {linechart_filtered["Truckout date"].iloc[-1]}", xaxis_title= "Date", yaxis_title="Moving Averages")
+    line_fig.update_layout(title=f"{plot_points}-Day(s) Moving Average -- {linechart_filtered["Truckout date"].iloc[0]} to {linechart_filtered["Truckout date"].iloc[-1]}", xaxis_title= "Date", yaxis_title="Moving Averages")
     line_fig.update_xaxes(autorange=True)
     line_fig.update_yaxes(autorange=True)
 
