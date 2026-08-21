@@ -18,13 +18,35 @@ This tool is designed to support **data-driven decision making**, trend monitori
 ### 🖥️ Dashboard Preview
 
 <p align="center">
-  <img src="screenshots/image1.png" width="45%" />
-  <img src="screenshots/image.png" width="45%" />
-  <img src="screenshots/image2.png" width="45%" />
-  <img src="screenshots/image3.png" width="45%" />
-  <img src="screenshots/image4.png" width="45%" />
-  
+  <b>📸 Project Showcase & Interface Views</b>
 </p>
+
+<table border="0" align="center">
+  <tr>
+    <td width="50%" align="center">
+      <img src="screenshots/image1.png" alt="Screenshot 1" width="100%">
+    </td>
+    <td width="50%" align="center">
+      <img src="screenshots/image.png" alt="Screenshot 2" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="screenshots/image2.png" alt="Screenshot 3" width="100%">
+    </td>
+    <td width="50%" align="center">
+      <img src="screenshots/image3.png" alt="Screenshot 4" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table border="0" align="center">
+  <tr>
+    <td width="100%" align="center">
+      <img src="screenshots/image4.png" alt="Screenshot 5" width="100%">
+    </td>
+  </tr>
+</table>
 
 ---
 
