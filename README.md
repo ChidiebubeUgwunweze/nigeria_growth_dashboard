@@ -1,11 +1,11 @@
 # 🇳🇬 Nigerian Downstream Chain Growth Monitor  
-**An Interactive 30-Day Performance Analytics Dashboard**
+**An Interactive Performance Analytics Dashboard**
 
 ## 📌 Overview
 
 The **Nigerian Downstream Chain Growth Monitor** is an interactive data analytics dashboard built with **Python, Dash, and Plotly** to monitor short-term performance trends in Nigeria’s downstream logistics chain.
 
-The system compares **daily performance against a rolling 30-day historical baseline**, highlights growth or decline, and visualizes state-level changes on a **geographic map of Nigeria**.
+The system compares **daily performance against a rolling x-days historical baseline**, highlights growth or decline, and visualizes state-level changes on a **geographic map of Nigeria**.
 
 This tool is designed to support **data-driven decision making**, trend monitoring, and early signal detection across multiple regions.
 
