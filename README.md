@@ -18,9 +18,11 @@ This tool is designed to support **data-driven decision making**, trend monitori
 ### 🖥️ Dashboard Preview
 
 <p align="center">
-  <img src="screenshots/bar_chart.png" width="45%" />
-  <img src="screenshots/moving_average.png" width="45%" />
-  <img src="screenshots/nigerian_map.png" width="45%" />
+  <img src="screenshots/image1.png" width="45%" />
+  <img src="screenshots/image.png" width="45%" />
+  <img src="screenshots/image2.png" width="45%" />
+  <img src="screenshots/image3.png" width="45%" />
+  <img src="screenshots/image4.png" width="45%" />
   
 </p>
 
