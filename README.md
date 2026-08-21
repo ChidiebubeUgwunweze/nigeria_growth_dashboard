@@ -12,7 +12,6 @@ This tool is designed to support **data-driven decision making**, trend monitori
 ---
 ## 🔗 Quick Links
 * 🚀 **Live Application:** [View Live App on Render](https://nigerian-growth-dashboard.onrender.com)
-* 📺 **Video Demo:** [Watch the 2-Minute Walkthrough](https://youtube.com/... or loom.com/...)
 
 ---
 
